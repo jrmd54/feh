@@ -391,6 +391,7 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 		{"randomize"     , 0, 0, OPTION_randomize},
 		{"start-at"      , 1, 0, OPTION_start_at},
 		{"thumb-title"   , 1, 0, OPTION_thumb_title},
+        {"use-folder"      , 0, 0, OPTION_use_folder},
 		{"bg-tile"       , 0, 0, OPTION_bg_title},
 		{"bg-center"     , 0, 0, OPTION_bg_center},
 		{"bg-scale"      , 0, 0, OPTION_bg_scale},
@@ -441,6 +442,7 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 		{0, 0, 0, 0}
 	};
 	int optch = 0, cmdx = 0;
+    opt.use_folder=0;
 
 	while ((optch = getopt_long(argc, argv, stropts, lopts, &cmdx)) != EOF) {
 		D(("Got option, getopt calls it %d, or %c\n", optch, optch));
@@ -690,6 +692,9 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 		case OPTION_thumb_title:
 			opt.thumb_title = estrdup(optarg);
 			break;
+		case OPTION_use_folder:
+			opt.use_folder = 1;
+			break;
 		case OPTION_bg_title:
 			opt.bgmode = BG_MODE_TILE;
 			break;
@@ -865,6 +870,30 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 		}
 	}
 
+    // =========================================================
+    if (opt.use_folder) {
+        // Special opt to use feh as replacement of eog in nautilus, usage:
+        //     feh --use-folder <IMAGE_PATH>
+        // It will have the same effect as feh <IMAGE_FOLDER> --start-at <IMAGE_PATH>
+        // This is because Exec field of xdg .decktop files does not have a %dir argument
+        // 1 - Set opt.start_list_at as original file arg
+        opt.start_list_at=(char*)malloc(strlen(argv[optind]));
+        strcpy(opt.start_list_at, argv[optind]);
+        // 2 - Set first opt as folder of arg
+        for (unsigned int i=strlen(opt.start_list_at); i--; i>=0) {
+            printf("%d == %c\n", i, opt.start_list_at[i]);
+            if (opt.start_list_at[i] == '/') {
+                argv[optind][i] = '\0';
+                break;
+            }
+        }
+        // DBG
+        /* FILE *fptr=fopen("/tmp/mylog", "w"); */
+        /* fprintf(fptr, opt.start_list_at); */
+        /* fprintf(fptr, "\n"); */
+        /* fprintf(fptr, argv[optind]); */
+    }
+    // =========================================================
 	/* Now the leftovers, which must be files */
 	if (optind < argc) {
 		while (optind < argc) {

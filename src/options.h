@@ -150,6 +150,7 @@ struct __fehoptions {
 	signed int conversion_timeout;
 
 	Imlib_Font menu_fn;
+    unsigned char use_folder;
 };
 
 enum __feh_option {
@@ -211,6 +212,7 @@ OPTION_thumb_width = 'y',
 OPTION_randomize = 'z',
 OPTION_start_at = '|',
 OPTION_thumb_title = '~',
+OPTION_use_folder,
 OPTION_bg_title,
 OPTION_bg_center,
 OPTION_bg_scale,
