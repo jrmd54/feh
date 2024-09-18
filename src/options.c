@@ -881,7 +881,6 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
         strcpy(opt.start_list_at, argv[optind]);
         // 2 - Set first opt as folder of arg
         for (unsigned int i=strlen(opt.start_list_at); i--; i>=0) {
-            printf("%d == %c\n", i, opt.start_list_at[i]);
             if (opt.start_list_at[i] == '/') {
                 argv[optind][i] = '\0';
                 break;
