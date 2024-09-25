@@ -596,10 +596,11 @@ void feh_filelist_image_remove(winwidget winwid, char do_delete)
 		else {
 			slideshow_change_image(winwid, SLIDE_PREV, 0);
 		}
-		if (do_delete)
+		if (do_delete) {
 			filelist = feh_file_rm_and_free(filelist, doomed);
-		else
+		} else {
 			filelist = feh_file_remove_from_list(filelist, doomed);
+        }
 		if (!filelist) {
 			/* No more images. Game over ;-) */
 			winwidget_destroy(winwid);
@@ -608,10 +609,11 @@ void feh_filelist_image_remove(winwidget winwid, char do_delete)
 		winwidget_render_image(winwid, 1, 0);
 	} else if ((winwid->type == WIN_TYPE_SINGLE)
 		   || (winwid->type == WIN_TYPE_THUMBNAIL_VIEWER)) {
-		if (do_delete)
+		if (do_delete) {
 			filelist = feh_file_rm_and_free(filelist, winwid->file);
-		else
+		} else {
 			filelist = feh_file_remove_from_list(filelist, winwid->file);
+        }
 		winwid->file = NULL;
 		winwidget_destroy(winwid);
 	}

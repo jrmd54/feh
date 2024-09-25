@@ -29,6 +29,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "signals.h"
 #include "options.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #ifdef HAVE_LIBCURL
 #include <curl/curl.h>
 #endif
@@ -113,7 +116,11 @@ void feh_file_info_free(feh_file_info * info)
 
 gib_list *feh_file_rm_and_free(gib_list * list, gib_list * l)
 {
-	unlink(FEH_FILE(l->data)->filename);
+	// unlink(FEH_FILE(l->data)->filename);
+    uint32_t bufsize = 4096 + 20;  // linux paths are 4096 characters long max
+    char buffer[bufsize];
+    sprintf(buffer, "trash-put %s", FEH_FILE(l->data)->filename);
+    system(buffer);
 	return(feh_file_remove_from_list(list, l));
 }
 
@@ -301,8 +308,13 @@ void delete_rm_files(void)
 {
 	gib_list *l;
 
-	for (l = rm_filelist; l; l = l->next)
-		unlink(FEH_FILE(l->data)->filename);
+	for (l = rm_filelist; l; l = l->next) {
+		// unlink(FEH_FILE(l->data)->filename);
+        uint32_t bufsize = 4096 + 20;  // linux paths are 4096 characters long max
+        char buffer[bufsize];
+        sprintf(buffer, "trash-put %s", FEH_FILE(l->data)->filename);
+        system(buffer);
+    }
 	return;
 }
 
