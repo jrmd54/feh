@@ -119,7 +119,7 @@ gib_list *feh_file_rm_and_free(gib_list * list, gib_list * l)
 	// unlink(FEH_FILE(l->data)->filename);
     uint32_t bufsize = 4096 + 20;  // linux paths are 4096 characters long max
     char buffer[bufsize];
-    sprintf(buffer, "trash-put %s", FEH_FILE(l->data)->filename);
+    sprintf(buffer, "trash-put \"%s\"", FEH_FILE(l->data)->filename);
     system(buffer);
 	return(feh_file_remove_from_list(list, l));
 }
@@ -312,7 +312,7 @@ void delete_rm_files(void)
 		// unlink(FEH_FILE(l->data)->filename);
         uint32_t bufsize = 4096 + 20;  // linux paths are 4096 characters long max
         char buffer[bufsize];
-        sprintf(buffer, "trash-put %s", FEH_FILE(l->data)->filename);
+        sprintf(buffer, "trash-put \"%s\"", FEH_FILE(l->data)->filename);
         system(buffer);
     }
 	return;
