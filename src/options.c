@@ -877,7 +877,7 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
         // It will have the same effect as feh <IMAGE_FOLDER> --start-at <IMAGE_PATH>
         // This is because Exec field of xdg .decktop files does not have a %dir argument
         // 1 - Set opt.start_list_at as original file arg
-        opt.start_list_at=(char*)malloc(strlen(argv[optind]));
+        opt.start_list_at=(char*)malloc(strlen(argv[optind]) + 1);
         strcpy(opt.start_list_at, argv[optind]);
         // 2 - Set first opt as folder of arg
         for (unsigned int i=strlen(opt.start_list_at); i--; i>=0) {
