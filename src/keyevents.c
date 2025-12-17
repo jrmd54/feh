@@ -624,8 +624,8 @@ void feh_event_handle_generic(winwidget winwid, unsigned int state, KeySym keysy
 		winwidget_render_image(winwid, 0, 0);
 	}
 	else if (feh_is_kp(EVENT_zoom_out, state, keysym, button)) {
-        if (winwid->im_w * (winwid->zoom / opt.zoom_rate) >= winwid->w
-            || winwid->im_h * (winwid->zoom / opt.zoom_rate) >= winwid->h) { // do not unzoom beyond image bounds
+        if (lround(winwid->im_w * (winwid->zoom / opt.zoom_rate)) >= winwid->w
+            || lround(winwid->im_h * (winwid->zoom / opt.zoom_rate)) >= winwid->h) { // do not unzoom beyond image bounds
             winwid->old_zoom = winwid->zoom;
             winwid->zoom = winwid->zoom / opt.zoom_rate;
 
