@@ -1118,6 +1118,34 @@ void winwidget_center_image(winwidget winwid)
 
 void winwidget_sanitise_offsets(winwidget winwid)
 {
+    // center img horizontally if width < window size
+    int scr_width = scr->width;
+    if (winwid->im_w * winwid->zoom <= winwid->w) {
+        if (winwid->full_screen) {
+            winwid->im_x = (scr_width - lround(winwid->im_w * winwid->zoom)) >> 1;
+        } else {
+            if (opt.geom_flags & WidthValue) {
+                winwid->im_x = ((int)opt.geom_w - lround(winwid->im_w * winwid->zoom)) >> 1;
+            } else {
+                winwid->im_x = lround((winwid->w - (winwid->im_w * winwid->zoom))/2);
+            }
+        }
+    }
+    // center img vertically if height < window height
+    int scr_height = scr->height;
+    if (winwid->im_h * winwid->zoom <= winwid->h) {
+        if (winwid->full_screen) {
+            winwid->im_y = (scr_height - lround(winwid->im_h * winwid->zoom)) >> 1;
+        } else {
+            if (opt.geom_flags & HeightValue) {
+                winwid->im_y = ((int)opt.geom_h - lround(winwid->im_h * winwid->zoom)) >> 1;
+            } else {
+                winwid->im_y = lround((winwid->h - (winwid->im_h * winwid->zoom))/2);
+            }
+        }
+    }
+
+    // regular sanitize; doing it after centering otherwise will blackout on unzoom
 	int far_left, far_top;
 	int min_x, max_x, max_y, min_y;
 

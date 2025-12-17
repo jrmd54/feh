@@ -491,24 +491,32 @@ void feh_event_handle_generic(winwidget winwid, unsigned int state, KeySym keysy
 			feh_thumbnail_select_prev(winwid, 1);
 	}
 	else if (feh_is_kp(EVENT_scroll_right, state, keysym, button)) {
-		winwid->im_x -= opt.scroll_step;;
-		winwidget_sanitise_offsets(winwid);
-		winwidget_render_image(winwid, 0, 0);
+        if (winwid->im_w * winwid->zoom > winwid->w) {  // prevent scroll if img width already fully visible
+            winwid->im_x -= opt.scroll_step;;
+            winwidget_sanitise_offsets(winwid);
+            winwidget_render_image(winwid, 0, 0);
+        }
 	}
 	else if (feh_is_kp(EVENT_scroll_left, state, keysym, button)) {
-		winwid->im_x += opt.scroll_step;
-		winwidget_sanitise_offsets(winwid);
-		winwidget_render_image(winwid, 0, 0);
+        if (winwid->im_w * winwid->zoom > winwid->w) { // prevent scroll if img width already fully visible
+            winwid->im_x += opt.scroll_step;
+            winwidget_sanitise_offsets(winwid);
+            winwidget_render_image(winwid, 0, 0);
+        }
 	}
 	else if (feh_is_kp(EVENT_scroll_down, state, keysym, button)) {
-		winwid->im_y -= opt.scroll_step;
-		winwidget_sanitise_offsets(winwid);
-		winwidget_render_image(winwid, 0, 0);
+        if (winwid->im_h * winwid->zoom > winwid->h) { // prevent scroll if img height already fully visible
+            winwid->im_y -= opt.scroll_step;
+            winwidget_sanitise_offsets(winwid);
+            winwidget_render_image(winwid, 0, 0);
+        }
 	}
 	else if (feh_is_kp(EVENT_scroll_up, state, keysym, button)) {
-		winwid->im_y += opt.scroll_step;
-		winwidget_sanitise_offsets(winwid);
-		winwidget_render_image(winwid, 0, 0);
+        if (winwid->im_h * winwid->zoom > winwid->h) { // prevent scroll if img height already fully visible
+            winwid->im_y += opt.scroll_step;
+            winwidget_sanitise_offsets(winwid);
+            winwidget_render_image(winwid, 0, 0);
+        }
 	}
 	else if (feh_is_kp(EVENT_scroll_right_page, state, keysym, button)) {
 		winwid->im_x -= winwid->w;
@@ -616,18 +624,21 @@ void feh_event_handle_generic(winwidget winwid, unsigned int state, KeySym keysy
 		winwidget_render_image(winwid, 0, 0);
 	}
 	else if (feh_is_kp(EVENT_zoom_out, state, keysym, button)) {
-		winwid->old_zoom = winwid->zoom;
-		winwid->zoom = winwid->zoom / opt.zoom_rate;
+        if (winwid->im_w * (winwid->zoom / opt.zoom_rate) >= winwid->w
+            || winwid->im_h * (winwid->zoom / opt.zoom_rate) >= winwid->h) { // do not unzoom beyond image bounds
+            winwid->old_zoom = winwid->zoom;
+            winwid->zoom = winwid->zoom / opt.zoom_rate;
 
-		if (winwid->zoom < ZOOM_MIN)
-			winwid->zoom = ZOOM_MIN;
+            if (winwid->zoom < ZOOM_MIN)
+                winwid->zoom = ZOOM_MIN;
 
-		winwid->im_x = (winwid->w / 2) - (((winwid->w / 2) - winwid->im_x) /
-			winwid->old_zoom * winwid->zoom);
-		winwid->im_y = (winwid->h / 2) - (((winwid->h / 2) - winwid->im_y) /
-			winwid->old_zoom * winwid->zoom);
-		winwidget_sanitise_offsets(winwid);
-		winwidget_render_image(winwid, 0, 0);
+            winwid->im_x = (winwid->w / 2) - (((winwid->w / 2) - winwid->im_x) /
+                winwid->old_zoom * winwid->zoom);
+            winwid->im_y = (winwid->h / 2) - (((winwid->h / 2) - winwid->im_y) /
+                winwid->old_zoom * winwid->zoom);
+            winwidget_sanitise_offsets(winwid);
+            winwidget_render_image(winwid, 0, 0);
+        }
 	}
 	else if (feh_is_kp(EVENT_zoom_default, state, keysym, button)) {
 		winwid->zoom = 1.0;

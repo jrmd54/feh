@@ -535,8 +535,9 @@ void feh_reload_image(winwidget w, int resize, int force_new)
 	}
 
 	if (!resize && ((old_w != gib_imlib_image_get_width(tmp)) ||
-			(old_h != gib_imlib_image_get_height(tmp))))
+			(old_h != gib_imlib_image_get_height(tmp)))) {
 		resize = 1;
+    }
 
 	if (!force_new)
 		winwidget_free_image(w);
@@ -546,8 +547,9 @@ void feh_reload_image(winwidget w, int resize, int force_new)
 
 	w->mode = MODE_NORMAL;
 	if ((w->im_w != gib_imlib_image_get_width(w->im))
-	    || (w->im_h != gib_imlib_image_get_height(w->im)))
+	    || (w->im_h != gib_imlib_image_get_height(w->im))) {
 		w->had_resize = 1;
+    }
 	if (w->has_rotated) {
 		Imlib_Image temp;
 
