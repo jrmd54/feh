@@ -1121,7 +1121,7 @@ void winwidget_sanitise_offsets(winwidget winwid)
     // center img horizontally if width < window size
     int scr_width = scr->width;
     if (winwid->im_w * winwid->zoom <= winwid->w) {
-        if (winwid->full_screen) {
+        if (winwid->full_screen && scr_width == winwid->w) {
             winwid->im_x = (scr_width - lround(winwid->im_w * winwid->zoom)) >> 1;
         } else {
             if (opt.geom_flags & WidthValue) {
@@ -1134,7 +1134,7 @@ void winwidget_sanitise_offsets(winwidget winwid)
     // center img vertically if height < window height
     int scr_height = scr->height;
     if (winwid->im_h * winwid->zoom <= winwid->h) {
-        if (winwid->full_screen) {
+        if (winwid->full_screen && scr_height == winwid->h) {
             winwid->im_y = (scr_height - lround(winwid->im_h * winwid->zoom)) >> 1;
         } else {
             if (opt.geom_flags & HeightValue) {
